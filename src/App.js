@@ -5,12 +5,14 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import "./App.css";
 import BlogForm from "./components/BlogForm";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -46,8 +48,8 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
+    } catch (error) {
+      setErrorMessage(error.response.data.error);
       setTimeout(() => setErrorMessage(null), 5000);
     }
   };
@@ -69,13 +71,22 @@ const App = () => {
     <div>
       <h2>blogs</h2>
 
+      {successMessage && <Notification type="success" message={successMessage} />}
+
+      {errorMessage && <Notification type="error" message={errorMessage} />}
+
       <div>
         {`${user.name} logged in`} <button onClick={handleClick}>logout</button>
       </div>
 
       <br></br>
 
-      <BlogForm blogs={blogs} setBlogs={setBlogs} />
+      <BlogForm
+        blogs={blogs}
+        setBlogs={setBlogs}
+        setSuccessMessage={setSuccessMessage}
+        setErrorMessage={setErrorMessage}
+      />
 
       <br></br>
 
