@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import "./App.css";
+import BlogForm from "./components/BlogForm";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -71,6 +72,10 @@ const App = () => {
       <div>
         {`${user.name} logged in`} <button onClick={handleClick}>logout</button>
       </div>
+
+      <br></br>
+
+      <BlogForm blogs={blogs} setBlogs={setBlogs} />
 
       <br></br>
 
