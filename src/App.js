@@ -14,10 +14,10 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [loginVisible, setLoginVisible] = useState(false);
+  const [blogVisible, setBlogVisible] = useState(false);
 
-  const hideWhenVisible = { display: loginVisible ? "none" : "" };
-  const showWhenVisible = { display: loginVisible ? "" : "none" };
+  const hideWhenVisible = { display: blogVisible ? "none" : "" };
+  const showWhenVisible = { display: blogVisible ? "" : "none" };
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -52,7 +52,7 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-      setLoginVisible(false);
+      setBlogVisible(false);
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setTimeout(() => setErrorMessage(null), 5000);
@@ -89,7 +89,7 @@ const App = () => {
       <br></br>
 
       <div style={hideWhenVisible}>
-        <button onClick={() => setLoginVisible(true)}>new blog</button>
+        <button onClick={() => setBlogVisible(true)}>new blog</button>
       </div>
 
       <div style={showWhenVisible}>
@@ -98,14 +98,14 @@ const App = () => {
           setBlogs={setBlogs}
           setSuccessMessage={setSuccessMessage}
           setErrorMessage={setErrorMessage}
-          setLoginVisible={setLoginVisible}
+          setBlogVisible={setBlogVisible}
         />
       </div>
 
       <br></br>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} setBlogs={setBlogs}/>
       ))}
     </div>
   );

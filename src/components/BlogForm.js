@@ -6,7 +6,7 @@ const BlogForm = ({
   setBlogs,
   setSuccessMessage,
   setErrorMessage,
-  setLoginVisible,
+  setBlogVisible,
 }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -19,7 +19,7 @@ const BlogForm = ({
   };
 
   const handleCancel = () => {
-    setLoginVisible(false);
+    setBlogVisible(false);
   };
 
   const handleSubmit = async (event) => {
@@ -37,7 +37,7 @@ const BlogForm = ({
       setSuccessMessage(`a new blog ${title} by ${author} added`);
       setTimeout(() => setSuccessMessage(null), 5000);
       clearForm();
-      setLoginVisible(false);
+      setBlogVisible(false);
     } catch (error) {
       setErrorMessage(error.message);
       setTimeout(() => setErrorMessage(null), 5000);
