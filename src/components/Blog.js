@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, setBlogs }) => {
+const Blog = ({ blog, setBlogs, user }) => {
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? "none" : "" };
@@ -32,6 +32,21 @@ const Blog = ({ blog, setBlogs }) => {
     setBlogs(blogs);
   };
 
+  const handleRemove = async () => {
+    const message = `Remove blog ${blog.title} by ${blog.author}`;
+
+    if (window.confirm(message)) {
+      await blogService.remove(blog.id);
+      const blogs = await blogService.getAll();
+      setBlogs(blogs);
+    }
+  };
+
+  let button;
+  if (user.username === blog.user.username) {
+    button = <button onClick={handleRemove}>remove</button>;
+  }
+
   return (
     <div style={blogStyle}>
       <div style={hideWhenVisible}>
@@ -48,6 +63,7 @@ const Blog = ({ blog, setBlogs }) => {
           {blog.likes} <button onClick={handleLike}>like</button>
         </div>
         <div>{blog.author}</div>
+        {button}
       </div>
     </div>
   );
