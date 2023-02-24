@@ -1,7 +1,13 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const BlogForm = ({ blogs, setBlogs, setSuccessMessage, setErrorMessage }) => {
+const BlogForm = ({
+  blogs,
+  setBlogs,
+  setSuccessMessage,
+  setErrorMessage,
+  setLoginVisible,
+}) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -10,6 +16,10 @@ const BlogForm = ({ blogs, setBlogs, setSuccessMessage, setErrorMessage }) => {
     setTitle("");
     setAuthor("");
     setUrl("");
+  };
+
+  const handleCancel = () => {
+    setLoginVisible(false);
   };
 
   const handleSubmit = async (event) => {
@@ -27,6 +37,7 @@ const BlogForm = ({ blogs, setBlogs, setSuccessMessage, setErrorMessage }) => {
       setSuccessMessage(`a new blog ${title} by ${author} added`);
       setTimeout(() => setSuccessMessage(null), 5000);
       clearForm();
+      setLoginVisible(false);
     } catch (error) {
       setErrorMessage(error.message);
       setTimeout(() => setErrorMessage(null), 5000);
@@ -47,6 +58,9 @@ const BlogForm = ({ blogs, setBlogs, setSuccessMessage, setErrorMessage }) => {
           url: <input onChange={({ target }) => setUrl(target.value)} />
         </div>
         <button type="submit">create</button>
+        <button type="button" onClick={handleCancel}>
+          cancel
+        </button>
       </form>
     </div>
   );

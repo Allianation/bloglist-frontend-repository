@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
-import Login from "./components/Login";
+import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import "./App.css";
@@ -14,6 +14,10 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loginVisible, setLoginVisible] = useState(false);
+
+  const hideWhenVisible = { display: loginVisible ? "none" : "" };
+  const showWhenVisible = { display: loginVisible ? "" : "none" };
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -48,6 +52,7 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
+      setLoginVisible(false);
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setTimeout(() => setErrorMessage(null), 5000);
@@ -56,14 +61,14 @@ const App = () => {
 
   if (user === null) {
     return (
-      <Login
+      <LoginForm
         handleLogin={handleLogin}
         username={username}
         setUsername={setUsername}
         password={password}
         setPassword={setPassword}
         errorMessage={errorMessage}
-      ></Login>
+      />
     );
   }
 
@@ -71,7 +76,9 @@ const App = () => {
     <div>
       <h2>blogs</h2>
 
-      {successMessage && <Notification type="success" message={successMessage} />}
+      {successMessage && (
+        <Notification type="success" message={successMessage} />
+      )}
 
       {errorMessage && <Notification type="error" message={errorMessage} />}
 
@@ -81,12 +88,19 @@ const App = () => {
 
       <br></br>
 
-      <BlogForm
-        blogs={blogs}
-        setBlogs={setBlogs}
-        setSuccessMessage={setSuccessMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <div style={hideWhenVisible}>
+        <button onClick={() => setLoginVisible(true)}>new blog</button>
+      </div>
+
+      <div style={showWhenVisible}>
+        <BlogForm
+          blogs={blogs}
+          setBlogs={setBlogs}
+          setSuccessMessage={setSuccessMessage}
+          setErrorMessage={setErrorMessage}
+          setLoginVisible={setLoginVisible}
+        />
+      </div>
 
       <br></br>
 

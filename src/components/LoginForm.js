@@ -1,7 +1,7 @@
 import React from "react";
 import Notification from "./Notification";
 
-const Login = ({
+const LoginForm = ({
   handleLogin,
   username,
   setUsername,
@@ -40,4 +40,4 @@ const Login = ({
   );
 };
 
-export default Login;
+export default LoginForm;
