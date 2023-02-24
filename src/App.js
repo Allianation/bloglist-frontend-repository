@@ -20,7 +20,18 @@ const App = () => {
   const showWhenVisible = { display: blogVisible ? "" : "none" };
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      blogs.sort((a, b) => {
+        if (a.likes === b.likes) {
+          return 0;
+        }
+        if (a.likes > b.likes) {
+          return -1;
+        }
+        return 1;
+      });
+      setBlogs(blogs);
+    });
   }, []);
 
   useEffect(() => {
@@ -105,7 +116,7 @@ const App = () => {
       <br></br>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} setBlogs={setBlogs}/>
+        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
       ))}
     </div>
   );
