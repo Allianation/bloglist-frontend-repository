@@ -1,13 +1,6 @@
 import { useState } from "react";
-import blogService from "../services/blogs";
 
-const BlogForm = ({
-  blogs,
-  setBlogs,
-  setSuccessMessage,
-  setErrorMessage,
-  setBlogVisible,
-}) => {
+const BlogForm = ({ setBlogVisible, handleSubmit }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -22,40 +15,39 @@ const BlogForm = ({
     setBlogVisible(false);
   };
 
-  const handleSubmit = async (event) => {
+  const addBlog = (event) => {
     event.preventDefault();
-
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url,
-    };
-
-    try {
-      const response = await blogService.create(newBlog);
-      setBlogs(blogs.concat(response));
-      setSuccessMessage(`a new blog ${title} by ${author} added`);
-      setTimeout(() => setSuccessMessage(null), 5000);
-      clearForm();
-      setBlogVisible(false);
-    } catch (error) {
-      setErrorMessage(error.message);
-      setTimeout(() => setErrorMessage(null), 5000);
-    }
+    handleSubmit(title, author, url);
+    clearForm();
   };
 
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={addBlog}>
         <div>
-          title: <input onChange={({ target }) => setTitle(target.value)} />
+          title:{" "}
+          <input
+            id="title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
         </div>
         <div>
-          author: <input onChange={({ target }) => setAuthor(target.value)} />
+          author:{" "}
+          <input
+            id="author"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
         </div>
         <div>
-          url: <input onChange={({ target }) => setUrl(target.value)} />
+          url:{" "}
+          <input
+            id="url"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
         </div>
         <button type="submit">create</button>
         <button type="button" onClick={handleCancel}>

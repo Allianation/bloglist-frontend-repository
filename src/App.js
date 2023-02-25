@@ -83,6 +83,25 @@ const App = () => {
     setBlogs(blogs);
   };
 
+  const handleSubmit = async (title, author, url) => {
+    const newBlog = {
+      title: title,
+      author: author,
+      url: url,
+    };
+
+    try {
+      const response = await blogService.create(newBlog);
+      setBlogs(blogs.concat(response));
+      setSuccessMessage(`a new blog ${title} by ${author} added`);
+      setTimeout(() => setSuccessMessage(null), 5000);
+      setBlogVisible(false);
+    } catch (error) {
+      setErrorMessage(error.message);
+      setTimeout(() => setErrorMessage(null), 5000);
+    }
+  };
+
   if (user === null) {
     return (
       <LoginForm
@@ -117,13 +136,7 @@ const App = () => {
       </div>
 
       <div style={showWhenVisible}>
-        <BlogForm
-          blogs={blogs}
-          setBlogs={setBlogs}
-          setSuccessMessage={setSuccessMessage}
-          setErrorMessage={setErrorMessage}
-          setBlogVisible={setBlogVisible}
-        />
+        <BlogForm setBlogVisible={setBlogVisible} handleSubmit={handleSubmit} />
       </div>
 
       <br></br>
