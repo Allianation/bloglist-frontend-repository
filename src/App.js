@@ -70,6 +70,19 @@ const App = () => {
     }
   };
 
+  const handleLike = async (blog) => {
+    const newBlogInfo = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+    };
+
+    await blogService.update(blog.id, newBlogInfo);
+    const blogs = await blogService.getAll();
+    setBlogs(blogs);
+  };
+
   if (user === null) {
     return (
       <LoginForm
@@ -116,7 +129,13 @@ const App = () => {
       <br></br>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} user={user} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          setBlogs={setBlogs}
+          user={user}
+          handleLike={handleLike}
+        />
       ))}
     </div>
   );

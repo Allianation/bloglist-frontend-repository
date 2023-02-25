@@ -41,3 +41,22 @@ test("click view button, can see blog detail", () => {
   expect(blogAll).toBeVisible();
   expect(blogAll).not.toHaveStyle("display: none");
 });
+
+test("click like button twice times", () => {
+  const mockHandler = jest.fn();
+
+  const component = render(
+    <Blog blog={blog} user={user} handleLike={mockHandler} />
+  );
+
+  const buttonView = component.getByText("view");
+  fireEvent.click(buttonView);
+
+  const blogAll = component.container.querySelector(".blogAll");
+  expect(blogAll).toBeVisible();
+
+  const buttonLike = component.getByText("like");
+  fireEvent.click(buttonLike);
+  fireEvent.click(buttonLike);
+  expect(mockHandler.mock.calls).toHaveLength(2);
+});
