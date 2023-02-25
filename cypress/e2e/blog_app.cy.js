@@ -42,4 +42,41 @@ describe("Blog app", function () {
       cy.get("html").should("not.contain", "root logged in");
     });
   });
+
+  describe.only("When logged in", function () {
+    beforeEach(function () {
+      cy.get("input:first").type("root");
+      cy.get("input:last").type("password");
+      cy.contains("login").click();
+    });
+
+    it("blog form is shown", function () {
+      cy.contains("new blog").click();
+      cy.contains("create new");
+      cy.contains("title");
+      cy.contains("author");
+      cy.contains("url");
+      cy.contains("create");
+      cy.contains("cancel");
+    });
+
+    it("a blog can be created", function () {
+      const blog = {
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+      };
+      cy.contains("new blog").click();
+      cy.get("#title").type(blog.title);
+      cy.get("#author").type(blog.author);
+      cy.get("#url").type(blog.url);
+      cy.get("#create").click();
+
+      cy.get("html").should("contain", "React patterns");
+      cy.get(".success")
+        .should("contain", "a new blog React patterns by Michael Chan")
+        .and("have.css", "color", "rgb(15, 81, 50)")
+        .and("have.css", "border-style", "solid");
+    });
+  });
 });
