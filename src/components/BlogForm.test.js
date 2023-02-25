@@ -23,7 +23,7 @@ test("BlogForm calls onSubmit", () => {
     target: { value: "https://reactpatterns.com" },
   });
 
-  component.debug();
+  //component.debug();
 
   fireEvent.submit(form);
 
