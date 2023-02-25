@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import Blog from "./Blog";
 
 const blog = {
@@ -29,4 +29,15 @@ test("default view, can only see title", () => {
 
   const blogAll = component.container.querySelector(".blogAll");
   expect(blogAll).not.toBeVisible();
+});
+
+test("click view button, can see blog detail", () => {
+  const component = render(<Blog blog={blog} user={user} />);
+
+  const buttonView = component.getByText("view");
+  fireEvent.click(buttonView);
+
+  const blogAll = component.container.querySelector(".blogAll");
+  expect(blogAll).toBeVisible();
+  expect(blogAll).not.toHaveStyle("display: none");
 });
