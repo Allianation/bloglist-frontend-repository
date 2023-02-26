@@ -1,6 +1,6 @@
 describe("Blog app", function () {
   beforeEach(function () {
-    cy.request("POST", "http://localhost:3003/api/tests/reset");
+    cy.request("POST", `${Cypress.env("BACKEND")}/tests/reset`);
 
     const user = {
       username: "root",
@@ -8,9 +8,9 @@ describe("Blog app", function () {
       name: "root",
     };
 
-    cy.request("POST", "http://localhost:3003/api/users/", user);
+    cy.request("POST", `${Cypress.env("BACKEND")}/users`, user);
 
-    cy.visit("http://localhost:3000");
+    cy.visit("");
   });
 
   it("login form is shown", function () {
@@ -43,11 +43,15 @@ describe("Blog app", function () {
     });
   });
 
-  describe("When logged in", function () {
+  describe.only("When logged in", function () {
     beforeEach(function () {
-      cy.get("input:first").type("root");
-      cy.get("input:last").type("password");
-      cy.contains("login").click();
+      cy.request("POST", `${Cypress.env("BACKEND")}/login`, {
+        username: "root",
+        password: "password",
+      }).then((response) => {
+        localStorage.setItem("loggedAppUser", JSON.stringify(response.body));
+        cy.visit("");
+      });
     });
 
     it("blog form is shown", function () {
@@ -80,21 +84,29 @@ describe("Blog app", function () {
     });
 
     it("like a blog", function () {
-      const blog = {
+      cy.createBlog({
         title: "React patterns",
         author: "Michael Chan",
         url: "https://reactpatterns.com/",
-      };
-      cy.contains("new blog").click();
-      cy.get("#title").type(blog.title);
-      cy.get("#author").type(blog.author);
-      cy.get("#url").type(blog.url);
-      cy.get("#create").click();
+      });
 
       cy.contains("view").click();
       cy.contains("like").click();
 
       cy.contains("1");
+    });
+
+    it("remove a blog", function () {
+      cy.createBlog({
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+      });
+
+      cy.contains("view").click();
+      cy.contains("remove").click();
+
+      cy.get("html").should("contain", "React patterns");
     });
   });
 });

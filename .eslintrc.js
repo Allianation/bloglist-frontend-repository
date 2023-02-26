@@ -6,8 +6,9 @@ module.exports = {
     "node": true
   },
   "globals": {
-    "cy": false,
-    "cypress/globals": true
+    "cy": true,
+    "cypress/globals": true,
+    "Cypress": true
   },
   "extends": [
     "eslint:recommended",
