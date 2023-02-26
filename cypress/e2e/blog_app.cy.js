@@ -43,7 +43,7 @@ describe("Blog app", function () {
     });
   });
 
-  describe.only("When logged in", function () {
+  describe("When logged in", function () {
     beforeEach(function () {
       cy.request("POST", `${Cypress.env("BACKEND")}/login`, {
         username: "root",
@@ -107,6 +107,24 @@ describe("Blog app", function () {
       cy.contains("remove").click();
 
       cy.get("html").should("contain", "React patterns");
+    });
+
+    it("compare blogs likes", function () {
+      cy.createBlog({
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com",
+        likes: 5,
+      });
+      cy.createBlog({
+        title: "Go To Statement Considered Harmful",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.u.arizona.edu",
+        likes: 12,
+      });
+
+      cy.contains("view").click();
+      cy.contains("12");
     });
   });
 });
